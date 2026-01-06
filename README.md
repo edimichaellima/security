@@ -128,6 +128,7 @@ O token contém:
 3. Rodar a aplicação:
 
 ```
+docker compose up -d
 mvn spring-boot:run
 ```
 

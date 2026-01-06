@@ -54,7 +54,6 @@ public class AuthController {
 		try {
 			token = TokenConfig.generateToken(user);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return ResponseEntity.ok(new LoginResponse(token));

@@ -20,10 +20,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "users")
 public class User implements UserDetails {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +37,7 @@ public class User implements UserDetails {
 	private String name;
 	private String email;
 	private String password;
-	
+
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
 	@Enumerated(EnumType.STRING)
@@ -40,9 +46,8 @@ public class User implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		
-		return roles.stream().map(r -> new SimpleGrantedAuthority(r.name()))
-				.toList();
+
+		return roles.stream().map(r -> new SimpleGrantedAuthority(r.name())).toList();
 	}
 
 	@Override
@@ -54,52 +59,25 @@ public class User implements UserDetails {
 	public String getUsername() {
 		return this.email;
 	}
-	
-    @Override
-    public boolean isAccountNonExpired() { return true; }
 
-    @Override
-    public boolean isAccountNonLocked() { return true; }
-
-    @Override
-    public boolean isCredentialsNonExpired() { return true; }
-
-    @Override
-    public boolean isEnabled() { return true; }
-
-	public Long getId() {
-		return id;
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
 	}
 
-	public String getName() {
-		return name;
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admin/")
 public class AdminController {
-	
+
 	@GetMapping(value = "/panel")
 	public String adminPanel() {
 		return "Somente Admin acessa!";

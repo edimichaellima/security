@@ -16,35 +16,26 @@ import assum.security.entity.User;
 public class TokenConfig {
 
 	private static String secret = "secret";
-	
+
 	public static String generateToken(User user) {
-		
+
 		Algorithm algorithm = Algorithm.HMAC256(secret);
-		
-		return JWT.create()
-				.withClaim("UserId", user.getId())
-				.withClaim("roles", user.getRoles().stream().map(Enum::name).toList())
-				.withSubject(user.getEmail())
-				.withExpiresAt(Instant.now().plusSeconds(86400))
-				.withIssuedAt(Instant.now())
-				.sign(algorithm);
+
+		return JWT.create().withClaim("UserId", user.getId())
+				.withClaim("roles", user.getRoles().stream().map(Enum::name).toList()).withSubject(user.getEmail())
+				.withExpiresAt(Instant.now().plusSeconds(86400)).withIssuedAt(Instant.now()).sign(algorithm);
 	}
 
 	public Optional<JWTUserData> validateToken(String token) {
 		try {
 			Algorithm algorithm = Algorithm.HMAC256(secret);
 
-	        DecodedJWT decode = JWT.require(algorithm)
-	                .build()
-	                .verify(token);
+			DecodedJWT decode = JWT.require(algorithm).build().verify(token);
 
-	        JWTUserData userData = JWTUserData.builder()
-	                .userId(decode.getClaim("UserId").asLong())
-	                .email(decode.getSubject())
-	                .roles(decode.getClaim("roles").asList(String.class))
-	                .build();
+			JWTUserData userData = JWTUserData.builder().userId(decode.getClaim("UserId").asLong())
+					.email(decode.getSubject()).roles(decode.getClaim("roles").asList(String.class)).build();
 
-	        return Optional.of(userData);
+			return Optional.of(userData);
 		} catch (JWTVerificationException ex) {
 			return Optional.empty();
 		}

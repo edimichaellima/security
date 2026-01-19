@@ -8,18 +8,17 @@ import org.springframework.stereotype.Service;
 import assum.security.repository.UserRepository;
 
 @Service
-public class AuthConfig implements UserDetailsService{
-	
+public class AuthConfig implements UserDetailsService {
+
 	private final UserRepository userRepository;
-	
+
 	public AuthConfig(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return userRepository.findUserByEmail(username)
-		        .orElseThrow(() -> new UsernameNotFoundException(username));
+		return userRepository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
 	}
 
 }
